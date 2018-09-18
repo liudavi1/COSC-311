@@ -1,0 +1,125 @@
+/**
+ * David Liu
+ * https://emunix.emich.edu/~haynes/311/fa18/Homework/hw0906.txt 
+ * COSC 311
+ * HW 09/11
+ * FALL 2018
+ */
+import java.io.*; 
+
+public class HW0916 {
+
+    static class Node {
+        double data;
+        Node next;
+        
+        public Node(double data, Node next) {
+            set_data(data);
+            set_next(next);
+        }
+        
+        public void set_data(double newData) {
+            this.data = newData;
+        }
+
+        public void set_next(Node newNext) {
+            this.next = newNext;
+        }
+
+        public double get_data(){
+            return data;
+        }
+        
+        public Node get_next(){
+            return next;
+        }
+        
+        public String toString() {
+            return data + " ";
+        }
+    }
+    
+    Node head = null;
+ 
+    public Node get_head(){
+        return head;
+    } 
+    public void set_head(Node newHead){
+        this.head = newHead;
+    }
+    
+    //changed below to HW0916 since that is the class name
+    // class HW0916 is a linkedList class
+    public HW0916(double [] input) {
+        //changed double to int because double is not required here
+        for (int i = (input.length - 1); i>= 0; i--) {
+            head = new Node(input[i], head);
+        }
+    }
+    
+    static public double get_ave(Node front) {
+        double average = 0;
+        double total = 0;
+        int num = 0;
+        
+        while( front != null){
+            total = total + front.get_data();    
+            front = front.get_next(); 
+            num = num + 1;
+        }
+        
+        average = total / num; 
+        return average;        
+    }
+    
+    static public void list_remove(Node front, double ave){
+        
+        Node pre_node = null;
+        
+        while( front != null){
+            if ( front.get_data() > ave ) {                             
+                if ( pre_node != null ) {         // not first node in list                             
+                    pre_node.set_next(front.get_next());  //pre_node.next = front.next;
+                    front = pre_node;
+                }
+                else {  // first element in list
+                    front.data = front.next.data;
+                    front.next = front.next.next;
+                }
+            }           
+            pre_node = front;
+            front = front.get_next();   // front = front.next       
+        }       
+    }
+        
+    public String toString() {
+        String s = "";
+        for (Node p = head; p != null; p = p.get_next()) {
+           s += p; 
+        }
+       
+       return s;
+    }
+    
+    public static void main(String[] args) {
+       double[] data = {100.0, 10.0, 15.0, 20.0, 200.0, 30.0, 40.0, 300.0};      
+       double newAve = 0.0;
+       //changed below to HW0916 again due to class name
+       HW0916 list = new HW0916(data);
+            
+       System.out.println("original list: " + list);
+       
+       newAve = get_ave(list.get_head());
+       System.out.println("average: " + newAve);
+
+       
+       list.list_remove(list.get_head(),newAve);     // remove element from list that great than newAve
+                                                     // exclude first element in list
+       
+       //if ( list.get_head().get_data() > newAve ) {
+        //  list.set_head(list.get_head().next);       // remove first element from list that great than newAve
+       //}
+       
+       System.out.println("modified list: " + list);
+    }    
+}
