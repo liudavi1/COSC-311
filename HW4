@@ -1,0 +1,96 @@
+public class CircQ {
+
+    private int[] q;
+    private int head, tail, size;
+    private static int arrSize = 10000000;
+
+    public CircQ(){
+        head = 0;
+        tail = 0;
+    }
+
+    CircQ(int x){
+        head = 0;
+        tail = 0;
+        size = x;
+        q = new int[arrSize];
+    }
+
+    private boolean isFull(){
+        return head == (tail + 1) % size;
+    }
+
+    private boolean isEmpty(){
+        return head == tail;
+    }
+
+    void insert(int x){
+        if(this.isFull()){
+            return;
+        } 
+        else{
+            tail = (tail + 1) % size;
+            q[tail] = x;
+        }
+    }
+
+    int delete(){
+        if(this.isEmpty()){
+            return -1;
+        }
+        else{
+            
+            head = (head + 1) % size;
+            return q[head];
+        }
+    }
+}
+
+
+import java.util.Random;
+public class test{
+    public static void main (String [] args){
+        int k = 10000;
+        int n = 20000;
+        int largeN = 1000000;
+        int size = (int) (1.5 *largeN);
+        
+        
+        CircQ c = new CircQ(size);
+        
+        
+        for (int i = 0; i< n; i++){
+            c.insert(5);
+        }
+        
+        
+        Random newRand = new Random();
+        int[] operate = new int[k];
+
+        for(int i = 0; i < k; i++)
+         {
+             operate[i] = newRand.nextInt(10);
+        }
+
+        System.out.println( "Queue Size and Time Taken (ns)");
+        
+        long start = System.nanoTime();
+        for(int j = 0; j < k; j++){
+                int op = operate[j];
+                if(op != 0){
+                    c.delete();
+                }
+                else{
+                    c.insert(5);
+                    
+                }
+                }
+        long end = System.nanoTime();
+        long resultTime = (start - end);
+        if (resultTime < 0){
+            resultTime = (-1) * resultTime;
+        }
+        
+        System.out.printf("%10s%10s\n",k, resultTime);
+    }
+    }
