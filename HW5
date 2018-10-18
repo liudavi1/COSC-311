@@ -1,0 +1,108 @@
+import java.util.Random;
+
+public class test{
+	
+    public static void main (String [] args) {
+        int k = 3;
+		int x, a, y;
+        int size = 10;
+        
+        CircQ cq = new CircQ(size);
+        
+        Random newRand = new Random(3);            // random seed 3
+
+        for(int i = 0; i < k; i++)                 // run loop 3 times (k=3)
+         {
+			x = newRand.nextInt(5) + 1;            // make randow number x from 1 to 5
+			System.out.println("Insert: x = " + x);
+			
+			for (int j=0; j < x; j++) {            // loop x times to insert element
+				a = newRand.nextInt(99);           // make randow number from 0 to 99
+				//System.out.println(" x a " + a);
+				cq.insert(a);
+				cq.displayQueue();
+			}
+             
+            y = newRand.nextInt(5) + 1;            // make randow number y from 1 to 5
+            System.out.println("Delete: y = " + y);
+        
+            for (int n = 0; n < y; n++ ) {         // loop y times to delete element
+                 cq.delete();
+                 cq.displayQueue();
+            }
+        }
+      
+    }
+}
+
+
+public class CircQ {
+
+    private int[] q;
+    private int head, tail, size;
+	private int currentSize;
+    
+    public CircQ(){
+        head = -1;
+        tail = -1;
+        size = 100;
+        currentSize = 0;
+    }
+
+    CircQ(int qSize){
+        head = -1;
+        tail = -1;
+        size = qSize;
+		currentSize = 0;
+        q = new int[size];
+    }
+
+    private boolean isFull(){
+        return currentSize == q.length;
+    }
+
+    private boolean isEmpty(){
+        
+        return currentSize ==0;
+    }
+
+    void insert(int x) {
+        
+         if ( !this.isFull() ) {     // queue is not full
+            
+            tail = (tail + 1) % size;
+            q[tail] = x;
+            currentSize++;
+            
+            if ( head == -1 ){     // when insert first element
+                head = 0;          // head and tail point first element in queue
+            }
+        }
+        
+    }
+
+    void delete() {
+        
+        if ( !this.isEmpty() ) {      // queue is not empty
+            
+            q[head] = 0;
+            head = (head + 1) % size;
+            currentSize--;
+        }
+    }
+	
+	void displayQueue(){
+		
+        if ( this.isEmpty() ) {
+            System.out.println("Empty queue");
+        }
+        else{
+            
+            System.out.print("Queue = ");
+            for (int i = head; i <= tail; i++) {    // print queue from head to tail
+			    System.out.print( q[i] + ", ");
+			}
+            System.out.println();
+        }
+    }
+}
