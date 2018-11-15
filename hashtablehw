@@ -1,0 +1,119 @@
+/**
+ * David Liu
+ * https://emunix.emich.edu/~haynes/311/fa18/Homework/hw0906.txt 
+ * COSC 311
+ * HW 11/14
+ * FALL 2018
+ */
+import java.util.Random;
+
+public class Hash{
+
+    /** 
+	* This function take int array inputArray and fill the random number
+	* into the array
+	**/
+	public static void fillArray(int[] inputArray) {
+		
+		int[] array = new int[41];		
+		
+		for (int i = 0; i <= 40; i++) {            
+			array[i] = i + 10;        // array contains numbers from 10 to 50
+		}	
+		
+		Random r = new Random(97);
+		
+		int n = 0;
+		int max = 40;                 // max index for array is 40
+		do {
+			int ix = r.nextInt(40);
+			
+			inputArray[n] = array[ix];   // array[ix] is random number, put it into inputArray
+			
+			array[ix] = array[max];      // remove used value from domain
+			 
+			max--;                       // shrink array
+			n++;		   
+		} while ( n < 20);
+			
+	}
+	
+    /** 
+	* This function add key (int) into hashTable
+	**/	
+	public static void insert(int key, int tableSize, int[] hashTable) {
+						
+		int index = key % tableSize;
+				//System.out.println(index + ", " + key + ", " + tableSize);
+		if ( hashTable[index] == 0 )   // empty space in hash table
+			hashTable[index] = key;    // add key to hash table
+		else {                         // not empty space in hash table
+			while (true) {                 // loop find next empty space
+				index = (index + 1) % tableSize;
+				if ( hashTable[index] == 0 ) {  // find empty space
+					hashTable[index] = key;     // add key to hash table
+					break;                      // after adding key, break while loop
+				}
+			}
+		}
+	}
+	
+    public static void main (String [] args) {
+ 
+        int tableSize1  = 8;
+        int tableSize2 = 16;
+        int tableSize3 = 32;
+		int arraySize = 20;
+		
+        int[] hashTable1 = new int[tableSize1];
+        int[] hashTable2 = new int[tableSize2];
+        int[] hashTable3 = new int[tableSize3];
+		int[] inputArray = new int[arraySize];
+
+		int key, count = 0;
+		
+		fillArray(inputArray);
+		
+		for (int i = 0; i < 20; i++) {
+		         //System.out.println(inputArray[i]);
+			key = inputArray[i];
+			if ( count < 6 ) {            // table size (8) * 0.75 = 6
+		
+			    insert(key, tableSize1, hashTable1);
+				count++;
+			} else if ( count < 12 ) {	  // table size (16) * 0.75 = 12
+                if ( count == 6 ) {		
+				    for (int j=0; j<hashTable1.length; j++) {
+					    if (hashTable1[j] != 0 ) {
+						    insert(hashTable1[j], tableSize2, hashTable2);
+					    } 
+					}
+                }
+              				
+		        insert(key, tableSize2, hashTable2);				
+				count++;
+			} else if ( count < 24 ) {    // table size (32) * 0.75 = 24
+                if ( count == 12 ) {		
+				    for (int k=0; k<hashTable2.length; k++) {
+					    if (hashTable2[k] != 0 ) {
+						    insert(hashTable2[k], tableSize3, hashTable3);
+					    } 
+					}
+                }
+              				
+		        insert(key, tableSize3, hashTable3);				
+				count++;
+			}
+		}
+
+		System.out.println("Index   Data Value");
+		
+		for (int i = 0; i < 32; i++) {  
+			if ( hashTable3[i] == 0)
+		        System.out.println(i + "       Empty");
+			else
+		        System.out.println(i + "       " +  hashTable3[i]);
+	    }
+    }
+	 
+}
